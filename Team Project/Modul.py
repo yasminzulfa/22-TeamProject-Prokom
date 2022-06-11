@@ -1,3 +1,10 @@
+import numpy as np
+import pandas as pd
+
+df = pd.read_excel("Database.xlsx")
+df_baru = df.dropna()
+Harga = df_baru.drop('no.', axis =1)
+
 def cekKota():
     while True:
       tujuan = input("Masukkan kota tujuan: ")
