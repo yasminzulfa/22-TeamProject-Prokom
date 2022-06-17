@@ -1,6 +1,8 @@
 import pandas as pd
 import Modul as m
-import numpy as np
+
+#mengimport data dari database, kemudian untuk dataframe kota dan kota asal, supaya lebih rapi dilakukan sort value
+#sehingga memunculkan print berupa kota yang diurutkan berdasarkan abjad 
 
 df = pd.read_excel('Database.xlsx')
 df2 = pd.read_excel('Daftar Pickup.xlsx')
@@ -15,14 +17,25 @@ print()
 print('Selamat Datang di Ongkirku ^_^'.center(60))
 while True:
     cari = input('Apakah kamu mau mencari biaya ongkir dari Jawa Tengah?(iya/tidak): '.center(55))
-    print()
+    print(
+    )
     print('======================================================================')
       
 
     if cari.lower() == 'iya': 
-        print("Berikut adalah lokasi pickup yang ada dalam program kami:")
+        print()
+        print('Berikut adalah jenis pengiriman yang ditawarkan:\n1. Paket Reguler (3-14 hari)\n2. Paket Cepat' 
+        ' (1-3hari)\n3. Paket Kargo (7-30 hari)')
+        print()
+        jenis_pengiriman = m.jenis_paket()
+        nama_pengiriman = jenis_pengiriman[1]
+        jenis_pengiriman = jenis_pengiriman[0]
+        print()
+        print('======================================================================')
+        print()
         
-
+        #melakukan loop sederhana untuk memunculkan nama kota asal serta nama kota tujuan dengan iterrows
+        print("Berikut adalah lokasi pickup yang ada dalam program kami:")
         for index, row in df_kota_asal.iterrows():
             print(str(index + 1) + ".", row["tempat"].title())
         print()
@@ -32,28 +45,37 @@ while True:
         print()
         print("Berikut adalah daftar kota yang ada dalam program kami:")
         for index, row in df_kota_tujuan.iterrows():
-            print(str(index) + ".", row["kota"].title())
+            print(str(index + 1) + ".", row["kota"].title())
         print()
         tujuan = m.cekKota()
+
         while True:   
                 #bila ingin masukkan berat bisa float
             try :
                 berat = float(input('Masukkan berat paket(kg)\t\t\t: '))
-                print('Berat paket Anda\t\t\t\t: {} Kg'.format(berat))
+                if berat <= 0:
+                    raise TypeError
                 break
-            except:
+            except ValueError:
                 print('Masukkan data berupa angka')
-            
+            except TypeError:
+                print('Masukkan berat yang valid')
+        
+        #mendeklerasikan list baru untuk olah data, kemudian dilakukan penambahan data menggunakan append
         ekspedisi = ['J&T Express', 'JNE', 'SiCepat Express','Tiki ','Pos Indonesia']
         harga2 = []
 
         for i in ekspedisi:
-            ber = m.hitungongkir(tujuan,berat, i, kota_asal)
+            ber = m.hitungongkir(tujuan,berat, i, kota_asal, jenis_pengiriman)
             harga2.append(int(ber))
             
-
         print()
         print('======================================================================')
+        print()
+        print('Jenis pengiriman Anda\t: ' + nama_pengiriman)
+        print("Kota pickup Anda\t: " + kota_asal)
+        print("Kota tujuan Anda\t: " + tujuan.capitalize())
+        print("Berat paket Anda\t:", berat)
         print()
         print('Ini list rekomendasi kami untuk mu ^_^')
         print()
