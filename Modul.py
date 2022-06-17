@@ -66,6 +66,8 @@ def hitungongkir(kota, berat, ekspedisi, fee, jenis_paket):
     berat_floor = berat//25
     if berat_floor >= 1:
       berat_asli = berat_floor + ((berat%25)/25)
+    else:
+      berat_asli = 1
   
   harga_ongkir = (Harga.loc[df['kota'] == kota, ekspedisi].iloc[0])*berat_asli
   fee = (Harga2.loc[df2['tempat'] == fee, ekspedisi].iloc[0]) * ((berat//10)+1)
